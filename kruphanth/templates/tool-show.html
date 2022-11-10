@@ -1,0 +1,145 @@
+{% extends 'maintest.html' %}
+{% load crispy_forms_tags %}
+{% block script %}
+<base href="http://127.0.0.1:8000/">
+<nav class="navbar navbar-expand-lg navbar-light " style="background-color:rgb(157, 221, 247);">
+  <a class="navbar-brand" href="{% url 'tool_show' %}">เครื่องมือทั้งหมด</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          สถานะ
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="{% url 'tool_show' %}" style="color:rgb(0, 0, 0); ">ทั้งหมด</a>
+          <a class="dropdown-item" href="{% url 'tool_status1' %}" style="color:rgb(0, 0, 0); ">ใช้งานปกติ</a>
+          <a class="dropdown-item" href="{% url 'tool_status2' %}" style="color:rgb(0, 0, 0); ">ส่งคลัง ใช้งานได้</a>
+          <a class="dropdown-item" href="{% url 'tool_status3' %}" style="color:rgb(0, 0, 0); ">ส่งคลัง ชำรุด</a>
+          <a class="dropdown-item" href="{% url 'tool_status4' %}" style="color:rgb(0, 0, 0); ">รอจำหน่าย</a>
+          <a class="dropdown-item" href="{% url 'tool_status5' %}" style="color:rgb(0, 0, 0); ">จำหน่ายแล้ว</a>
+          <a class="dropdown-item" href="{% url 'tool_status6' %}" style="color:rgb(0, 0, 0); ">อื่นๆ</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          ประเภท
+        </a>
+        <div class="dropdown-menu">
+          {% for r in Qtype %}
+          <a class="dropdown-item" href="{% url 'tool_type' idtype=r.idtype %}"
+            style="color:rgb(0, 0, 0); ">{{r.idtype}}</a>
+          {% endfor %}
+          <a> =========================</a>
+          <a class="dropdown-item" href="{% url 'typeshow' %}" style="color:rgb(0, 0, 0); ">ดูประเภทเครื่องมือ</a>
+          <a class="dropdown-item" href="{% url 'typecreate' %}" style="color:rgb(0, 0, 0); ">เพิ่มประเภทเครื่องมือ</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          สถานที่/กลุ่มงาน
+        </a>
+        <div class="dropdown-menu">
+          {% for r in Qloca %}
+          <a class="dropdown-item" href="{% url 'tool_loca' loca=r.location %}"
+            style="color:rgb(0, 0, 0); ">{{r.location}}</a>
+          {% endfor %}
+          <a> ===============</a>
+          <a class="dropdown-item" href="{% url 'locashow' %}" style="color:rgb(0, 0, 0); ">ดูสถานที่</a>
+          <a class="dropdown-item" href="{% url 'locacreate' %}" style="color:rgb(0, 0, 0); ">เพิ่มสถานที่</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " style="color:rgb(0, 0, 0); " href="{% url 'tool_create' %}">เพิ่มเครื่องมือ</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'Reprot' %}" style="color:rgb(0, 0, 0);">Report</a>
+      </li>
+    </ul>
+    <form>
+      <ul class="navbar-nav">
+        <li class="nav-item ">
+          <div class="bd-example">
+            {{ form.name.label }}
+            {{ form.name }}
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <!--<button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+              onclick="document.location='/tool/show'">Search</button>--->
+            <a class="  btn btn-outline-danger my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </form>
+  </div>
+</nav>
+{% endblock %}
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <div style="background-color:rgb(233, 244, 249);">
+    <style>
+      table,tr,th,td {
+        border: 2px solid rgb(170, 172, 172);
+      }
+    </style>
+    <table class="table table-bordered table-responsive-md table-md table-striped " style=" background-color:rgb(255, 255, 255);">
+      <thead style="background-color:rgb(137, 138, 139);">
+        <tr>
+          <th scope="col">Serial</th>
+          <th scope="col">ชื่อ</th>
+          <th scope="col">ที่อยู่</th>
+          <th scope="col">ประเภท</th>
+          <th scope="col">สถานะ</th>
+          <th scope="col">รายละเอียด</th>
+          <th scope="col"></th>
+          <th scope="col">แก้ไข/ลบ</th>
+        </tr>
+      </thead>
+      {% for r in data %}
+      <tr>
+        <th scope="row"><a style="color:rgb(0, 0, 0); " href="{% url 'tool_att' id=r.id %}">{{ r.serial }}</a></th>
+        <td><a style="color:rgb(0, 0, 0); " href="{% url 'tool_att' id=r.id %}">{{ r.name }}</a></td>
+        <td><a style="color:rgb(0, 0, 0); " href="{% url 'tool_att' id=r.id %}">{{ r.location }}</a></td>
+        <td><a style="color:rgb(0, 0, 0); " href="{% url 'tool_att' id=r.id %}">{{ r.idtype }}</a></td>
+        <td><a style="color:rgb(0, 0, 0); " href="{% url 'tool_att' id=r.id %}">{{ r.status }}</a></td>
+        <td><a style="color:rgb(0, 0, 0); " href="{% url 'tool_att' id=r.id %}">{{ r.details }}</a></td>
+        <td>
+          <a href="{% url 'tool_att' id=r.id %}">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+              <path fill-rule="evenodd" d="M11.063 1.456a1.75 1.75 0 011.874 0l8.383 5.316a1.75 1.75 0 010 2.956l-8.383 5.316a1.75 1.75 0 01-1.874 0L2.68 
+                            9.728a1.75 1.75 0 010-2.956l8.383-5.316zm1.071 1.267a.25.25 0 00-.268 0L3.483 8.039a.25.25 0 000 .422l8.383 
+                            5.316a.25.25 0 00.268 0l8.383-5.316a.25.25 0 000-.422l-8.383-5.316z"></path>
+              <path fill-rule="evenodd" d="M1.867 
+                            12.324a.75.75 0 011.035-.232l8.964 5.685a.25.25 0 00.268 0l8.964-5.685a.75.75 0 01.804 1.267l-8.965 5.685a1.75 
+                            1.75 0 01-1.874 0l-8.965-5.685a.75.75 0 01-.231-1.035z"></path>
+              <path fill-rule="evenodd" d="M1.867 16.324a.75.75 
+                            0 011.035-.232l8.964 5.685a.25.25 0 00.268 0l8.964-5.685a.75.75 0 01.804 1.267l-8.965 5.685a1.75 1.75 0 01-1.874 
+                            0l-8.965-5.685a.75.75 0 01-.231-1.035z"></path>
+            </svg></a>
+        </td>
+        <td style="text-align: center;">
+          <a class="btn btn-outline-primary" href="{% url 'tool_update' id=r.id %}">แก้ไข</a>
+          <a class="btn btn-outline-danger" href="javascript:del('{% url 'tool_delete' id=r.id %}')">ลบ</a>
+          <script>
+            function del(url) {
+              if (confirm('ยืนยันการลบ')) {
+                document.location = url;
+              }
+            }
+          </script>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</form>
+{% endblock %}
+{% block namelogin %}
+<h7>สวัสดี คุณ {{ name }} {{ lastname }}</h7>
+{% endblock %}

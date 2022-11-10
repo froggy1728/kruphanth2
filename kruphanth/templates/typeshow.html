@@ -1,0 +1,119 @@
+{% extends 'maintest.html' %}
+{% load crispy_forms_tags %}
+{% block script %}
+<base href="http://127.0.0.1:8000/">
+<nav class="navbar navbar-expand-lg navbar-light " style="background-color:rgb(157, 221, 247);">
+  <a class="navbar-brand" href="{% url 'tool_show' %}">เครื่องมือทั้งหมด</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          สถานะ
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="{% url 'tool_show' %}" style="color:rgb(0, 0, 0); ">ทั้งหมด</a>
+          <a class="dropdown-item" href="{% url 'tool_status1' %}" style="color:rgb(0, 0, 0); ">ชำรุด</a>
+          <a class="dropdown-item" href="{% url 'tool_status2' %}" style="color:rgb(0, 0, 0); ">กำลังใช้งาน</a>
+          <a class="dropdown-item" href="{% url 'tool_status3' %}" style="color:rgb(0, 0, 0); ">ดำเนินการซ่อม</a>
+          <a class="dropdown-item" href="{% url 'tool_status4' %}" style="color:rgb(0, 0, 0); ">พร้อมใช้งาน</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          ประเภท
+        </a>
+        <div class="dropdown-menu">
+          {% for r in Qtype %}
+            <a class="dropdown-item" href="{% url 'tool_type' idtype=r.idtype %}" style="color:rgb(0, 0, 0); ">{{r.idtype}}</a>
+            {% endfor %}
+            <a> =========================</a>
+            <a class="dropdown-item" href="{% url 'typeshow' %}" style="color:rgb(0, 0, 0); ">ดูประเภทเครื่องมือ</a>
+            <a class="dropdown-item" href="{% url 'typecreate' %}" style="color:rgb(0, 0, 0); ">เพิ่มประเภทเครื่องมือ</a>
+          </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          สถานที่/กลุ่มงาน
+        </a>
+        <div class="dropdown-menu">
+          {% for r in Qloca %}
+            <a class="dropdown-item" href="{% url 'tool_loca' loca=r.location %}" style="color:rgb(0, 0, 0); ">{{r.location}}</a>
+            {% endfor %}
+            <a> ===============</a>
+            <a class="dropdown-item" href="{% url 'locashow' %}" style="color:rgb(0, 0, 0); ">ดูสถานที่</a>
+            <a class="dropdown-item" href="{% url 'locacreate' %}" style="color:rgb(0, 0, 0); ">เพิ่มสถานที่</a>
+          </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " style="color:rgb(0, 0, 0); " href="{% url 'tool_create' %}">เพิ่มเครื่องมือ</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'Reprot' %}" style="color:rgb(0, 0, 0);">Report</a>
+      </li>
+    </ul>
+    <form>
+      <ul class="navbar-nav">
+        <li class="nav-item ">
+          <div class="bd-example">
+              {{ form.name.label }}
+              {{ form.name }}
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <a class="  btn btn-outline-danger my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </form>
+  </div>
+</nav>
+{% endblock %}
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <section >
+    <div class="col-md-10 " >
+      <style>
+        table,tr,th,td {
+          border: 2px solid rgb(170, 172, 172);
+        }
+      </style>
+      <table class="table table-bordered table-responsive-md table-md table-striped " style=" background-color:rgb(255, 255, 255);">
+        <thead style="background-color:rgb(137, 138, 139);">
+          <tr >
+              <th scope="col">ชื่อประเภท</th>
+              <th scope="col">รหัสประเภท</th>
+              <th scope="col">รายละเอียดประเภท</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          {% for r in Qtype %}
+          <tr>
+            <th scope="row" ><a style="color:rgb(0, 0, 0); " href="{% url 'tool_type' idtype=r.idtype %}">{{ r.idtype }}</a></th>
+            <td><a style="color:rgb(0, 0, 0); " href="{% url 'tool_type' idtype=r.idtype %}">{{ r.typecode }}</a></td>
+            <td><a style="color:rgb(0, 0, 0); " href="{% url 'tool_type' idtype=r.idtype %}">{{ r.typedetails }}</a></td>
+            <td style="text-align: center;" >
+              <a class="btn btn-outline-danger" href="javascript:del('{% url 'typedel' id=r.idtype %}')">ลบ</a>  
+              <script>
+                function del(url) {
+                  if (confirm('ยืนยันการลบประเภทเครื่องมือ')) {
+                    document.location = url;
+                  }
+                }
+              </script>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+  </section>
+</form>
+{% endblock %}
+{% block namelogin %}
+<h7>สวัสดี คุณ {{ name }} {{ lastname }}</h7>
+{% endblock %}

@@ -1,0 +1,246 @@
+{% extends 'maintest.html' %}
+{% load crispy_forms_tags %}
+{% block script %}
+<base href="http://127.0.0.1:8000/">
+<nav class="navbar navbar-expand-lg navbar-light " style="background-color:rgb(157, 221, 247);">
+  <a class="navbar-brand" href="{% url 'tool_show' %}">เครื่องมือทั้งหมด</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          สถานะ
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="{% url 'tool_show' %}" style="color:rgb(0, 0, 0); ">ทั้งหมด</a>
+          <a class="dropdown-item" href="{% url 'tool_status1' %}" style="color:rgb(0, 0, 0); ">ใช้งานปกติ</a>
+          <a class="dropdown-item" href="{% url 'tool_status2' %}" style="color:rgb(0, 0, 0); ">ส่งคลัง ใช้งานได้</a>
+          <a class="dropdown-item" href="{% url 'tool_status3' %}" style="color:rgb(0, 0, 0); ">ส่งคลัง ชำรุด</a>
+          <a class="dropdown-item" href="{% url 'tool_status4' %}" style="color:rgb(0, 0, 0); ">รอจำหน่าย</a>
+          <a class="dropdown-item" href="{% url 'tool_status5' %}" style="color:rgb(0, 0, 0); ">จำหน่ายแล้ว</a>
+          <a class="dropdown-item" href="{% url 'tool_status6' %}" style="color:rgb(0, 0, 0); ">อื่นๆ</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          ประเภท
+        </a>
+        <div class="dropdown-menu">
+          {% for r in Qtype %}
+          <a class="dropdown-item" href="{% url 'tool_type' idtype=r.idtype %}"
+            style="color:rgb(0, 0, 0); ">{{r.idtype}}</a>
+          {% endfor %}
+          <a> =========================</a>
+          <a class="dropdown-item" href="{% url 'typeshow' %}" style="color:rgb(0, 0, 0); ">ดูประเภทเครื่องมือ</a>
+          <a class="dropdown-item" href="{% url 'typecreate' %}" style="color:rgb(0, 0, 0); ">เพิ่มประเภทเครื่องมือ</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          สถานที่/กลุ่มงาน
+        </a>
+        <div class="dropdown-menu">
+          {% for r in Qloca %}
+          <a class="dropdown-item" href="{% url 'tool_loca' loca=r.location %}"
+            style="color:rgb(0, 0, 0); ">{{r.location}}</a>
+          {% endfor %}
+          <a> ===============</a>
+          <a class="dropdown-item" href="{% url 'locashow' %}" style="color:rgb(0, 0, 0); ">ดูสถานที่</a>
+          <a class="dropdown-item" href="{% url 'locacreate' %}" style="color:rgb(0, 0, 0); ">เพิ่มสถานที่</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " style="color:rgb(0, 0, 0); " href="{% url 'tool_create' %}">เพิ่มเครื่องมือ</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'Reprot' %}" style="color:rgb(0, 0, 0);">Report</a>
+      </li>
+    </ul>
+    <form>
+      <ul class="navbar-nav">
+        <li class="nav-item ">
+          <div class="bd-example">
+            {{ form.name.label }}
+            {{ form.name }}
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <a class="  btn btn-outline-danger my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </form>
+  </div>
+</nav>
+{% endblock %}
+{% block showatt %}
+<form action="addtool" method="post">
+  {% csrf_token %}
+  <div style="background-color:rgb(180, 227, 246);">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-8">
+          <div class="border border-dark p-6 " style="background-color:rgb(157, 221, 247); border-radius: 1rem; ">
+            <br>
+            <h1 class="fw-bold mb-2 text-center">เพิ่มข้อมูลทะเบียนครุภัณฑ์</h1>
+            <div class="card-body p-6 form-row ">
+              <div class="form-row col-md-6">
+                <div class="form-row col-md-12">
+                  <div class="form-group col-md-12">
+                    <label class="form-label">เลขทะเบียน</label>
+                    <label class="form-label text-danger">
+                      {% for r in messages %}
+                      {{ r }}
+                      {% endfor %}
+                    </label>
+                    <input type="text" name="serial" class="form-control form-control-lg" />
+                  </div>
+                </div>
+                <div class="form-row col-md-12">
+                  <div class="form-row col-md-12">
+                    <div class="form-group  col-md-10">
+                      <label class="form-label">สถานที่  --</label><a class="btn btn-outline-success " style="width:50px; height:20; font-size:5px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                          <path fill-rule="evenodd"
+                            d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM8 0a8 8 0 100 16A8 8 0 008 0zm.75 4.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z">
+                          </path>
+                        </svg></a>
+                      <select class="form-control form-control-lg" value="-" name="location" >
+                        <option> </option>
+                        {% for r in Qloca %}
+                        <option>{{r.location}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row col-md-12">
+                  <div class="form-row col-md-12">
+                    <div class="form-group  col-md-10">
+                      <label class="form-label">สถานะ</label>
+                      <select class="form-control form-control-lg" value="{{row.status}}" name="status" >
+                        <option></option>
+                        <option>ใช้งานปกติ</option>
+                        <option>ส่งคลัง ใช้งานได้</option>
+                        <option>ส่งคลัง ชำรุด</option>
+                        <option>รอจำหน่าย</option>
+                        <option>จำหน่ายแล้ว</option>
+                        <option>อื่นๆ</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row col-md-12">
+                  <div class="form-row col-md-12">
+                    <div class="form-group  col-md-10">
+                      <label class="form-label">ราคา</label>
+                      <input type="number" name="price" class="form-control form-control-lg" />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row col-md-12">
+                  <div class="form-row col-md-12">
+                    <div class="form-group  col-md-10">
+                      <label class="form-label">วิธีการได้มา</label>
+                      <select class="form-control form-control-lg" name="acquisition" >
+                        <option></option>
+                        <option>ตกลงราคา</option>
+                        <option>สอบราคา</option>
+                        <option>ของแถม</option>
+                        <option>ยืม</option>
+                        <option>วิธีเฉพาะเจาะจง</option>
+                        <option>ช่างของ รพ. ทำเอง</option>
+                        <option>บริจาก</option>
+                        <option>อื่นๆ</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row col-md-6">
+                <section class="col-md-12">
+                  <div class="form-row col-md-12">
+                    <div class="form-group  col-md-12">
+                      <label class="form-label">ชื่อเครื่องมือ</label>
+                      <input type="text" name="name" required class="form-control form-control-lg" />
+                    </div>
+                  </div>
+                  <div class="form-row col-md-12">
+                    <div class="form-group col-md-10">
+                      <label class="form-label">ประเภท  --</label><a class="btn btn-outline-success" style="width:50px; height:20; font-size:5px;" >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                          <path fill-rule="evenodd"
+                            d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM8 0a8 8 0 100 16A8 8 0 008 0zm.75 4.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z">
+                          </path>
+                        </svg></a>
+                      <select class="form-control form-control-lg" value="{{row.idtype}}" name="idtype" >
+                        <option></option>
+                        {% for r in Qtype %}
+                        <option>{{r.idtype}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group  col-md-2">
+                    </div>
+                  </div>
+                  <div class="form-row col-md-12">
+                    <div class="form-group  col-md-12">
+                      <label class="form-label" >วันที่ได้รับ</label>
+                      <input type="date" name="date" class="form-control form-control-lg" />
+                    </div>
+                  </div>
+                  <div class="form-row col-md-12">
+                    <div class="form-row col-md-12">
+                      <div class="form-group  col-md-10">
+                        <label class="form-label">ประเภทเงิน</label>
+                        <select class="form-control form-control-lg" value="{{row.pricetype}}" name="pricetype" >
+                          <option></option>
+                          <option>เงินงบประมาณ</option>
+                          <option>เงินนอกงบประมาณ</option>
+                          <option>เงินบริจาก</option>
+                          <option>เงินงบค่าเสื่อม</option>
+                          <option>เงินอื่นๆ</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="form-row col-md-12">
+                <div class="form-row col-md-12">
+                  <div class="form-group  col-md-10">
+                    <label class="form-label">รายละเอียด</label>
+                    <input type="text" value="{{row.details}}" name="details" class="form-control form-control-lg" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-row col-md-12">
+                <div class="form-row col-md-12">
+                  <div class="form-group  col-md-12">
+                    <p class="mt-4 text-center">
+                      <button type="submit" class="btn btn-outline-dark btn-lg px-5">บันทึกข้อมูล</button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+</form>
+{% endblock %}
+{% block namelogin %}
+<h7>สวัสดี คุณ {{ name }} {{ lastname }}</h7>
+{% endblock %}

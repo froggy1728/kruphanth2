@@ -1,0 +1,134 @@
+{% extends 'maintest.html' %}
+{% load crispy_forms_tags %}
+{% block script %}
+<base href="http://127.0.0.1:8000/">
+<nav class="navbar navbar-expand-lg navbar-light " style="background-color:rgb(157, 221, 247);">
+  <a class="navbar-brand" href="{% url 'tool_show' %}">เครื่องมือทั้งหมด</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          สถานะ
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="{% url 'tool_show' %}" style="color:rgb(0, 0, 0); ">ทั้งหมด</a>
+          <a class="dropdown-item" href="{% url 'tool_status1' %}" style="color:rgb(0, 0, 0); ">ใช้งานปกติ</a>
+          <a class="dropdown-item" href="{% url 'tool_status2' %}" style="color:rgb(0, 0, 0); ">ส่งคลัง ใช้งานได้</a>
+          <a class="dropdown-item" href="{% url 'tool_status3' %}" style="color:rgb(0, 0, 0); ">ส่งคลัง ชำรุด</a>
+          <a class="dropdown-item" href="{% url 'tool_status4' %}" style="color:rgb(0, 0, 0); ">รอจำหน่าย</a>
+          <a class="dropdown-item" href="{% url 'tool_status5' %}" style="color:rgb(0, 0, 0); ">จำหน่ายแล้ว</a>
+          <a class="dropdown-item" href="{% url 'tool_status6' %}" style="color:rgb(0, 0, 0); ">อื่นๆ</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          ประเภท
+        </a>
+        <div class="dropdown-menu">
+          {% for r in Qtype %}
+          <a class="dropdown-item" href="{% url 'tool_type' idtype=r.idtype %}"
+            style="color:rgb(0, 0, 0); ">{{r.idtype}}</a>
+          {% endfor %}
+          <a> =========================</a>
+          <a class="dropdown-item" href="{% url 'typeshow' %}" style="color:rgb(0, 0, 0); ">ดูประเภทเครื่องมือ</a>
+          <a class="dropdown-item" href="{% url 'typecreate' %}" style="color:rgb(0, 0, 0); ">เพิ่มประเภทเครื่องมือ</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false"
+          style="color:rgb(0, 0, 0); ">
+          สถานที่/กลุ่มงาน
+        </a>
+        <div class="dropdown-menu">
+          {% for r in Qloca %}
+          <a class="dropdown-item" href="{% url 'tool_loca' loca=r.location %}"
+            style="color:rgb(0, 0, 0); ">{{r.location}}</a>
+          {% endfor %}
+          <a> ===============</a>
+          <a class="dropdown-item" href="{% url 'locashow' %}" style="color:rgb(0, 0, 0); ">ดูสถานที่</a>
+          <a class="dropdown-item" href="{% url 'locacreate' %}" style="color:rgb(0, 0, 0); ">เพิ่มสถานที่</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " style="color:rgb(0, 0, 0); " href="{% url 'tool_create' %}">เพิ่มเครื่องมือ</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'Reprot' %}" style="color:rgb(0, 0, 0);">Report</a>
+      </li>
+    </ul>
+    <form>
+      <ul class="navbar-nav">
+        <li class="nav-item ">
+          <div class="bd-example">
+              {{ form.name.label }}
+              {{ form.name }}
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <a class="  btn btn-outline-danger my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </form>
+  </div>
+</nav>
+{% endblock %}
+{% block showatt %}
+{% csrf_token %}
+<div style="background-color:rgb(180, 227, 246);">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-6">
+        <div class="border border-dark" style="background-color:rgb(157, 221, 247); border-radius: 1rem;">
+          <div class="card-body p-6 text-center">
+            <div class="mb-md-5 mt-md-7 pb-5">
+              <h2 class="fw-bold mb-2 text-dark">เพิ่มสถานที่ </h2>
+              <p class="text-dark-50 mb-5">Equipment</p>
+              <!---<div class="form-outline form-white mb-4">
+                      <input type="text" id="username" mane="username" placeholder="username"
+                        class="form-control form-control-lg" />
+                      <label class="form-label" for="typeEmailX">Username</label>
+                    </div>
+  
+                    <div class="form-outline form-white mb-4">
+                      <input type="password" id="password" name="password" placeholder="password"
+                        class="form-control form-control-lg" />
+                      <label class="form-label" for="typePasswordX">Password</label>
+                    </div>--->
+              <form action="addloca" method="post">
+                {% csrf_token %}
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label">ชื่อสถานที่</label>
+                  <input type="text" name="location" required class="form-control form-control-lg" />
+                  <label class="form-label text-danger">
+                    {% for r in messages %}
+                    {{ r }}
+                    {% endfor %}
+                  </label>
+                </div>
+
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label">ตำแหน่งสถานที</label>
+                  <input type="text" name="namelocation" required class="form-control form-control-lg" />
+                </div>
+                <p class="mt-4 text-center">
+                  <button type="submit" class="btn btn-outline-dark btn-lg px-5">บันทึกข้อมูล
+                  </button>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block namelogin %}
+<h7>สวัสดี คุณ {{ name }} {{ lastname }}</h7>
+{% endblock %}

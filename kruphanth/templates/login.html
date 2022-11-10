@@ -1,0 +1,58 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="th" style="background-color:rgb(180, 227, 246);">
+<head>
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'image/icon.png' %}"/>
+</head>
+<form method="post">
+  {% csrf_token %}
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!------ Include the above in your HEAD tag ---------->
+  <section class="vh-100 gradient-custom">
+    <div style="background-color:rgb(180, 227, 246);">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="border border-dark" style="background-color:rgb(157, 221, 247); border-radius: 1rem;">
+              <div class="card-body p-5 text-center">
+                <div class="mb-md-5 mt-md-4 pb-5">
+                  <h1 class="fw-bold mb-2 text-dark">รพ.ศจ.</h1>
+                  <p class="text-dark-50 mb-5">Equipment</p>
+                  <!---<div class="form-outline form-white mb-4">
+                    <input type="text" id="username" mane="username" placeholder="username"
+                      class="form-control form-control-lg" />
+                    <label class="form-label" for="typeEmailX">Username</label>
+                  </div>
+
+                  <div class="form-outline form-white mb-4">
+                    <input type="password" id="password" name="password" placeholder="password"
+                      class="form-control form-control-lg" />
+                    <label class="form-label" for="typePasswordX">Password</label>
+                  </div>--->
+                  
+                  {% if err_msg != None %}
+                  <div class="text-danger text-center">{{ err_msg }}</div><br>
+                  {% endif %}
+
+                  {# csrf_token #}
+
+                  {{ form|crispy }}
+                  <br>
+                  <p class="text-center">
+                    <button type="submit" class="btn btn-outline-dark btn-lg px-5">Login
+                    </button>
+                   <!--- <p class="small mb-5 pb-lg-2"><a class="text-dark-50" href="{% url 'Empcreate' %}">ลงทะเบียน</a></p>-->
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+</html>

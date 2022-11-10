@@ -1,0 +1,54 @@
+{% load static %}
+<!--โหลด Static-->
+<!DOCTYPE html>
+<html lang="th" style="background-color:rgb(180, 227, 246);">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'image/icon.png' %}"/> <!-- icon -->
+  <!--<meta http-equiv="X-UA-Compatible" content="width=device-width, initial-scale=1.0">-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Document{% endblock %}</title>
+  <!-- เชื่อมต่อ bootstrap.min.css-->
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+  {% block style %}{% endblock %}
+  <script src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+  <script src="{% static 'bootstrap/js/popper.min.js' %}"></script>
+  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  <base href="http://127.0.0.1:8000/">
+  <marquee direction="left" >  </marquee>
+  <p align ="center">
+  <img src="{% static 'image/ป้ายเว็บ.png' %}" width="1420" height="120"></p>
+</head>
+
+<body style="background-color:rgb(180, 227, 246);">
+  <div style="background-color:rgb(180, 227, 246);">
+    {% block script %}{% endblock %}
+  </div>
+
+  <center><div class=" col-md-10 " style="margin: 10px; ">
+    {% block content %} {% endblock %}
+  </div></center>
+
+  <div class="col-md-12">
+    {% block showatt %} {% endblock %}
+  </div>
+  <div class="col-md-12">
+  </div>
+  <footer>
+    <div class="container col-md-12 ">
+    </div>
+  </footer>
+</body>
+<div style="background-color:rgb(180, 227, 246);">
+  <div style="margin: 30px 20px;text-align: center;">
+    &copy; {% now 'D M Y' %}
+    {% block namelogin %} {% endblock %}
+  </div>
+</div>
+
+</html>
